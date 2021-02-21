@@ -1,13 +1,13 @@
 import React,{useState} from 'react';
-import UserContextProvider from './context';
+import {TodosContextProvider} from './context';
 import Screen from "./Screen";
 
 function App() {
 
   return (
-    <UserContextProvider>
+    <TodosContextProvider>
       <Screen />
-    </UserContextProvider>
+    </TodosContextProvider>
   );
 }
 

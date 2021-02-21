@@ -1,5 +1,5 @@
-import React,{useContext} from "react";
-import {UserContext} from "./context";
+import React,{useContext,useState} from "react";
+import {TodosStateContext} from "./context";
 import styled from "styled-components";
 
 
@@ -8,11 +8,12 @@ interface IProps{
 }
 
 const Header:React.FunctionComponent<IProps> =()=>{
-    const context = useContext(UserContext);
-    console.log(context);
+    const context = useContext(TodosStateContext);
+    
     return(
         <header>
-            <a href="#">Home</a>Hello,
+            <a href="#">Home</a>Hello, {context&&context.user}, you are {context.loggedIn?"logged in": "anonymous"}
+            
         </header>
     )
 }

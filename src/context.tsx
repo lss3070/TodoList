@@ -1,23 +1,20 @@
-import React,{createContext,Dispatch, useReducer} from "react";
+import React,{createContext,Dispatch, useReducer,useContext} from "react";
 
 
 
 export type Todo ={
-    id:number,
-    text:string;
-    name:string;
-    done:boolean;
+    user:string,
+    loggedIn:boolean;
 }
-type TodosState= Todo[];
+
+// type TodosState= Todo[];
+
+export const TodosStateContext = createContext<Todo>({} as Todo);
 
 
-
-const TodosStateContext = createContext<TodosState>({} as TodosState);
 
 type Action =
-  | { type: 'CREATE'; text: string }
-  | { type: 'TOGGLE'; id: number }
-  | { type: 'REMOVE'; id: number };
+  | { type: 'Click'; }
 
   type TodosDispatch= Dispatch<Action>;
 
@@ -25,48 +22,35 @@ type Action =
     undefined
   );
 
-  function todosReducer(state: TodosState, action: Action): TodosState {
+  function todosReducer(state: Todo, action: Action): Todo {
     switch (action.type) {
-      case 'CREATE':
-        const nextId = Math.max(...state.map(todo => todo.id)) + 1;
-        return state.concat({
-          id: nextId,
-          text: action.text,
-          done: false,
-          name:"SongSeop"
-        });
-      case 'TOGGLE':
-        return state.map(todo =>
-          todo.id === action.id ? { ...todo, done: !todo.done } : todo
-        );
-      case 'REMOVE':
-        return state.filter(todo => todo.id !== action.id);
+      case"Click":
+          state.loggedIn=true;
+        return state;
       default:
         throw new Error('Unhandled action');
     }
   }
 
+  export function useTodosDispatch() {
+    console.log("!!")
+    const dispatch = useContext(TodosDispatchContext);
+    if (!dispatch) throw new Error('TodosProvider not found');
+    return dispatch;
+  }
+
 export function TodosContextProvider({children}:{children:React.ReactNode}){
-    const[todos,dispatch]=useReducer(todosReducer,[
-        {
-        id: 1,
-        text: 'Context API 배우기',
-        done: true,
-        name:""
-        },
-        {
-        id: 1,
-        text: 'Context API 배우기',
-        done: true,
-        name:""
-        },
-        {
-        id: 1,
-        text: 'Context API 배우기',
-        done: true,
-        name:""
-        }
-]);
+    const[todos,dispatch]=useReducer(todosReducer,{
+      user:"SongSeop",
+      loggedIn:false
+    }
+);
+
+
+
+
+
+
 return(
     <TodosDispatchContext.Provider value={dispatch}>
     <TodosStateContext.Provider value={todos}>
